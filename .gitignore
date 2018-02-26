@@ -6,3 +6,4 @@ __pycache__
 dev
 .pytest_cache
 sources/*
+!sources/.gitkeep
