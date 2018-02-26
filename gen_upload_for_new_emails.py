@@ -1,3 +1,8 @@
+"""
+takes National data and Action Network data, figures out which rows in National data have an email address not present
+in existing Action Network data, and creates a CSV upload
+"""
+
 from objects.National import National
 from objects.ActionNetwork import ActionNetwork
 
@@ -15,7 +20,3 @@ national_minus_email_matches = n.minus_email_matches(old_data=a.rows)
 a_upload = ActionNetwork()
 a_upload.feed(rows=national_minus_email_matches)
 print(a_upload.to_csv())
-#print(len(a_upload.rows))
-
-# minus lname matches, fname1 in fname2 or vice versa
-# minus lname matches, fname1 and fname2 have same first initial

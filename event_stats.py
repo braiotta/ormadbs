@@ -1,3 +1,7 @@
+"""
+generates count of records for each "Event" type
+"""
+
 from objects.ActionNetwork import ActionNetwork
 from collections import OrderedDict
 import operator
