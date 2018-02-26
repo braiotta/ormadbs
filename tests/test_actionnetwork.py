@@ -51,3 +51,22 @@ class ActionNetworkTestCase(unittest.TestCase):
             "first_name,last_name,email,zip_code,ORMA Supporter,VoterVANID,Ward/PrecinctName,Zip\r\nLibby,Snowflake,libsnowflake@gmail.com,01234,,999,MA1,\r\nAgent,Provocateur,agentprovocateur@gmail.com,02345,,888,MA2,\r\n",
             csv
         )
+
+    @unittest.mock.patch.object(DataSource, 'load_file', side_effect=return_national_load)
+    def test_minus_old_emails(self, load_file):
+        n = ActionNetwork()
+        n.load()
+
+        old_data = [
+            {'first_name': 'Henry', 'last_name': 'Kissinger', 'email': 'hk@clinton.org'},
+            {'zip': '01234', 'ward_precinct': 'MA1', 'email': 'libsnowflake@gmail.com', 'first_name': 'Libby',
+             'last_name': 'Snowflake', 'vanid': '999'}
+        ]
+
+        # Libby Snowflake exists in the old data and the new. Expect to see her gone.
+        combed = n.minus_email_matches(old_data=old_data)
+        self.assertEqual(
+            [{'last_name': 'Provocateur', 'first_name': 'Agent', 'email': 'agentprovocateur@gmail.com', 'vanid': '888',
+              'zip': '02345', 'ward_precinct': 'MA2'}],
+            combed
+        )

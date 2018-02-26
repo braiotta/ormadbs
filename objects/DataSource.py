@@ -32,7 +32,9 @@ class DataSource:
         return new_row
 
     def minus_email_matches(self, old_data):
-        pass
+        old_emails = {thedict['email']:1 for thedict in [row for row in old_data]}
+        combed_data = [row for row in self.rows if row['email'] not in old_emails]
+        return combed_data
 
     def to_csv(self):
         import csv
