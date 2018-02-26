@@ -6,28 +6,41 @@ from objects.DataSource import DataSource
 def return_national_load(*args, **kwargs):
     rows = [
         {'last_name': 'Snowflake', 'zip_code': '1234', 'first_name': 'Libby', 'Ward/PrecinctName': 'MA1',
-         'email': 'libsnowflake@gmail.com', 'VoterVANID': '999'},
+         'email': 'LIBsnowflake@gmail.com', 'VoterVANID': '999'},
         {'last_name': 'Provocateur', 'zip_code': '2345', 'first_name': 'Agent', 'Ward/PrecinctName': 'MA2',
          'email': 'agentprovocateur@gmail.com', 'VoterVANID': '888'}
     ]
 
     return rows
 
+
 class ActionNetworkTestCase(unittest.TestCase):
-    def test_map_row(self):
+    def test_map_row_results(self):
         raw_row = {'last_name': 'Snowflake', 'zip_code': '1234', 'first_name': 'Libby', 'Ward/PrecinctName': 'MA1',
          'email': 'libsnowflake@gmail.com', 'VoterVANID': '999'}
 
         n = ActionNetwork()
         row = n.map_row(row=raw_row)
 
-        print(row)
-
         self.assertEqual(
             {'zip': '01234', 'last_name': 'Snowflake', 'first_name': 'Libby', 'email': 'libsnowflake@gmail.com',
              'ward_precinct': 'MA1', 'vanid': '999'},
             row
         )
+
+    def test_map_row_lowercases_email(self):
+        raw_row = {'last_name': 'Snowflake', 'zip_code': '1234', 'first_name': 'Libby', 'Ward/PrecinctName': 'MA1',
+                   'email': 'LIBsnowflake@gmail.com', 'VoterVANID': '999'}
+        n = ActionNetwork()
+        row = n.map_row(row=raw_row)
+        self.assertEqual(raw_row['email'].lower(), row['email'])
+
+    def test_map_row_zeropads_zip(self):
+        raw_row = {'last_name': 'Snowflake', 'zip_code': '1234', 'first_name': 'Libby', 'Ward/PrecinctName': 'MA1',
+                   'email': 'LIBsnowflake@gmail.com', 'VoterVANID': '999'}
+        n = ActionNetwork()
+        row = n.map_row(row=raw_row)
+        self.assertEqual('0' + raw_row['zip_code'], row['zip'])
 
     @unittest.mock.patch.object(DataSource, 'load_file', side_effect=return_national_load)
     def test_load(self, load_file):

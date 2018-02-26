@@ -28,6 +28,7 @@ class DataSource:
             pass
 
         new_row['zip'] = DataSource.pad_zip(zip=new_row['zip'])
+        new_row['email'] = new_row['email'].lower()
 
         return new_row
 
@@ -51,8 +52,11 @@ class DataSource:
         for row in self.rows:
             new_row = {}
             for k, v in row.items():
-                new_k = self.col_map[k]
-                new_row[new_k] = v
+                try:
+                    new_k = self.col_map[k]
+                    new_row[new_k] = v
+                except KeyError:
+                    pass
             csv_data.append(new_row)
 
         # return output
