@@ -4,6 +4,9 @@ class DataSource:
     def __init__(self):
         self.rows = []
 
+    def feed(self, rows):
+        self.rows = rows
+
     def load(self):
         [self.rows.append(self.map_row(row)) for row in self.load_file()]
 
@@ -27,6 +30,36 @@ class DataSource:
         new_row['zip'] = DataSource.pad_zip(zip=new_row['zip'])
 
         return new_row
+
+    def minus_email_matches(self, old_data):
+        pass
+
+    def to_csv(self):
+        import csv
+        import io
+        output = io.StringIO()
+
+        csv_data = []
+
+        # update all keys to reflect output key names
+        for row in self.rows:
+            new_row = {}
+            for k, v in row.items():
+                new_k = self.col_map[k]
+                new_row[new_k] = v
+            csv_data.append(new_row)
+
+        # return output
+        str_output = ""
+        with output:
+            writer = csv.DictWriter(output, fieldnames=self.csv_order)
+            writer.writeheader()
+            for row in csv_data:
+                writer.writerow(row)
+
+            str_output = output.getvalue()
+
+        return str_output
 
     @staticmethod
     def pad_zip(zip):

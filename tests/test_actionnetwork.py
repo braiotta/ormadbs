@@ -41,3 +41,13 @@ class ActionNetworkTestCase(unittest.TestCase):
               'last_name': 'Provocateur', 'vanid': '888'}],
             n.rows
         )
+
+    @unittest.mock.patch.object(DataSource, 'load_file', side_effect=return_national_load)
+    def test_to_csv(self, load_file):
+        n = ActionNetwork()
+        n.load()
+        csv = n.to_csv()
+        self.assertEqual(
+            "first_name,last_name,email,zip_code,ORMA Supporter,VoterVANID,Ward/PrecinctName,Zip\r\nLibby,Snowflake,libsnowflake@gmail.com,01234,,999,MA1,\r\nAgent,Provocateur,agentprovocateur@gmail.com,02345,,888,MA2,\r\n",
+            csv
+        )
