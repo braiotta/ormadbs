@@ -10,11 +10,12 @@ class ActionNetwork(DataSource):
         "zip": "zip_code",
         "email": "email",
         'ward_precinct': 'Ward/PrecinctName',
-        'vanid': "VoterVANID"
+        'vanid': "VoterVANID",
+        "event": "Event"
     }
 
-    csv_order = ['first_name', 'last_name', 'email', 'zip_code', 'ORMA Supporter', 'VoterVANID', 'Ward/PrecinctName',
-                 'Zip']
+    csv_order = ["First Name", "Last Name", "Email", "Phone", "Cell Phone", "Gender", "Address 1", "City", "State",
+                 "Zip", "Event", "Orma supporter", "National Data"]
 
     def __init__(self):
         super().__init__()
