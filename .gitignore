@@ -1,0 +1,8 @@
+.DS_Store
+.idea
+__pycache__
+.pyc
+.cache
+dev
+.pytest_cache
+sources/*
