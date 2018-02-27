@@ -77,7 +77,7 @@ class ActionNetworkTestCase(unittest.TestCase):
         ]
 
         # Libby Snowflake exists in the old data and the new. Expect to see only her.
-        combed = n.only_email_matches(old_data=old_data)
+        combed = n.only_email_matches(other_data=old_data)
         self.assertEqual(
             [{'zip': '01234', 'ward_precinct': 'MA1', 'email': 'libsnowflake@gmail.com', 'first_name': 'Libby',
              'last_name': 'Snowflake', 'vanid': '999', 'event': 'ice cream social'}],
@@ -96,7 +96,7 @@ class ActionNetworkTestCase(unittest.TestCase):
         ]
 
         # Libby Snowflake exists in the old data and the new. Expect to see her gone.
-        combed = n.only_email_matches(old_data=old_data)
+        combed = n.only_email_matches(other_data=old_data)
         self.assertEqual(
             [{'last_name': 'Provocateur', 'first_name': 'Agent', 'email': 'agentprovocateur@gmail.com', 'vanid': '888',
               'zip': '02345', 'ward_precinct': 'MA2', 'event': 'boxing match'}],

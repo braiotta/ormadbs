@@ -32,18 +32,18 @@ class DataSource:
 
         return new_row
 
-    def minus_email_matches(self, old_data):
+    def minus_email_matches(self, other_data):
         # compile a dict of all emails in old data
-        old_emails = {thedict['email']:1 for thedict in [row for row in old_data]}
+        old_emails = {thedict['email']:1 for thedict in [row for row in other_data]}
 
         # for every row in new data, pass it on if the email doesn't exist in dict of old_email data
         combed_data = [row for row in self.rows if row['email'] not in old_emails]
 
         return combed_data
 
-    def only_email_matches(self, old_data):
+    def only_email_matches(self, other_data):
         # compile a dict of all emails in old data
-        old_emails = {thedict['email']:1 for thedict in [row for row in old_data]}
+        old_emails = {thedict['email']:1 for thedict in [row for row in other_data]}
 
         # for every row in new data, pass it on if the email DOES exist in dict of old_email data
         combed_data = [row for row in self.rows if row['email'] in old_emails]

@@ -14,7 +14,7 @@ n = National()
 n.load()
 
 # minus email matches
-national_minus_email_matches = n.minus_email_matches(old_data=a.rows)
+national_minus_email_matches = n.minus_email_matches(other_data=a.rows)
 
 # create a csv upload for action network based removing those with matching email
 a_upload = ActionNetwork()
