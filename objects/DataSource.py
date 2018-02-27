@@ -29,24 +29,26 @@ class DataSource:
 
         new_row['zip'] = DataSource.pad_zip(zip=new_row['zip'])
         new_row['email'] = new_row['email'].lower()
+        if 'event' in new_row:
+            new_row['event'] = new_row['event'].lower()
 
         return new_row
 
     def minus_email_matches(self, other_data):
         # compile a dict of all emails in old data
-        old_emails = {thedict['email']:1 for thedict in [row for row in other_data]}
+        other_emails = {thedict['email']:1 for thedict in [row for row in other_data]}
 
         # for every row in new data, pass it on if the email doesn't exist in dict of old_email data
-        combed_data = [row for row in self.rows if row['email'] not in old_emails]
+        combed_data = [row for row in self.rows if row['email'] not in other_emails]
 
         return combed_data
 
     def only_email_matches(self, other_data):
         # compile a dict of all emails in old data
-        old_emails = {thedict['email']:1 for thedict in [row for row in other_data]}
+        other_emails = {thedict['email']:1 for thedict in [row for row in other_data]}
 
         # for every row in new data, pass it on if the email DOES exist in dict of old_email data
-        combed_data = [row for row in self.rows if row['email'] in old_emails]
+        combed_data = [row for row in self.rows if row['email'] in other_emails]
 
         return combed_data
 

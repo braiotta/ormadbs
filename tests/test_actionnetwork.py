@@ -35,6 +35,13 @@ class ActionNetworkTestCase(unittest.TestCase):
         row = n.map_row(row=raw_row)
         self.assertEqual(raw_row['email'].lower(), row['email'])
 
+    def test_map_row_lowercases_event(self):
+        raw_row = {'last_name': 'Snowflake', 'zip_code': '1234', 'first_name': 'Libby', 'Ward/PrecinctName': 'MA1',
+                   'email': 'LIBsnowflake@gmail.com', 'VoterVANID': '999', 'Event': 'ICE cream social'}
+        n = ActionNetwork()
+        row = n.map_row(row=raw_row)
+        self.assertEqual(raw_row['Event'].lower(), row['event'])
+
     def test_map_row_zeropads_zip(self):
         raw_row = {'last_name': 'Snowflake', 'zip_code': '1234', 'first_name': 'Libby', 'Ward/PrecinctName': 'MA1',
                    'email': 'LIBsnowflake@gmail.com', 'VoterVANID': '999', 'Event': 'ice cream social'}
@@ -77,10 +84,11 @@ class ActionNetworkTestCase(unittest.TestCase):
         ]
 
         # Libby Snowflake exists in the old data and the new. Expect to see only her.
-        combed = n.only_email_matches(other_data=old_data)
+        combed = n.minus_email_matches(other_data=old_data)
+
         self.assertEqual(
-            [{'zip': '01234', 'ward_precinct': 'MA1', 'email': 'libsnowflake@gmail.com', 'first_name': 'Libby',
-             'last_name': 'Snowflake', 'vanid': '999', 'event': 'ice cream social'}],
+            [{'ward_precinct': 'MA2', 'zip': '02345', 'last_name': 'Provocateur', 'vanid': '888',
+              'event': 'boxing match', 'email': 'agentprovocateur@gmail.com', 'first_name': 'Agent'}],
         combed
         )
 
@@ -98,9 +106,9 @@ class ActionNetworkTestCase(unittest.TestCase):
         # Libby Snowflake exists in the old data and the new. Expect to see her gone.
         combed = n.only_email_matches(other_data=old_data)
         self.assertEqual(
-            [{'last_name': 'Provocateur', 'first_name': 'Agent', 'email': 'agentprovocateur@gmail.com', 'vanid': '888',
-              'zip': '02345', 'ward_precinct': 'MA2', 'event': 'boxing match'}],
-            combed
+            [{'vanid': '999', 'last_name': 'Snowflake', 'zip': '01234', 'event': 'ice cream social',
+              'ward_precinct': 'MA1', 'first_name': 'Libby', 'email': 'libsnowflake@gmail.com'}],
+        combed
         )
 
     def test_to_csv_works_with_new_heading_order_from_karen(self):
